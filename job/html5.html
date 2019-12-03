@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        .bmap{
+            width:700px;
+            height:550px;
+            border: 1px solid #ccc;
+        }
+        .box{
+            width: 200px;
+            height: 200px;
+            background: #ccc;
+            border:1px solid #000;
+            margin: 300px auto 0 auto;
+            transition: 1s all ease;
+            transform:perspective(700px) rotate3d(1, 1.5, 1, 20deg);
+            transform-style: preserve-3d;
+        }
+        .box:active{
+            transform:perspective(700px) rotate3d(1, 1.5, 1, 100deg);
+        }
+        .box .childUp{
+            width: 100%;
+            height: 100%;
+            background: yellow;
+            transition: 1s all ease;
+            transform: translateZ(200px);
+        }
+        .box .childDown{
+            width: 100%;
+            height: 100%;
+            background: red;
+            transition: 1s all ease;
+            transform-style: preserve-3d;
+            transform: translateY(-200px);
+        }
+        .box .childLeft{
+            width: 100%;
+            height: 100%;
+            background: blue;
+            transition: 1s all ease;
+            transform-style: preserve-3d;
+            transform: translate3D(-100px, -400px, 100px) rotateY(90deg);
+        }
+        .box .childRight{
+            width: 100%;
+            height: 100%;
+            background: darkgreen;
+            transition: 1s all ease;
+            transform-style: preserve-3d;
+            transform: translate3D(100px, -600px, 100px) rotateY(90deg);
+        }
+        .box .childIn{
+            width: 100%;
+            height: 100%;
+            background: hotpink;
+            transition: 1s all ease;
+            transform-style: preserve-3d;
+            transform: translate3D(0px, -900px, 100px) rotateX(90deg);
+        }
+        .box .childOut {
+            width: 100%;
+            height: 100%;
+            background: purple;
+            transition: 1s all ease;
+            transform-style: preserve-3d;
+            transform: translate3D(0px, -900px, 100px) rotateX(90deg);
+        }
+    </style>
+    <title>html5 新特性</title>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.2"></script>
+    <script> // 定位的逻辑
+        window.onload = function() {
+            const geolocationBtn = document.getElementById("geolocation");
+            geolocationBtn.onclick = function() {
+                // console.log(navigator.geolocation);
+                navigator.geolocation.getCurrentPosition(res => {
+                    console.log(res.coords);
+                    // alert("成功");
+                    //创建和初始化地图函数：
+                    function initMap(){
+                    createMap();//创建地图
+                    setMapEvent();//设置地图事件
+                    addMapControl();//向地图添加控件
+                    addMapOverlay();//向地图添加覆盖物
+                    }
+                    function createMap(){ 
+                        map = new BMap.Map("map"); 
+                        map.centerAndZoom(new BMap.Point(-95.712891,37.09024),15);
+                    }
+                    function setMapEvent(){
+                        map.enableScrollWheelZoom();
+                        map.enableKeyboard();
+                        map.enableDragging();
+                        map.enableDoubleClickZoom()
+                    }
+                    function addClickHandler(target,window){
+                        target.addEventListener("click",function(){
+                        target.openInfoWindow(window);
+                    });
+                    }
+                    function addMapOverlay(){
+                        var markers = [
+                            {content:"过来找我",title:"我的位置",imageOffset: {width:0,height:3},position:{lat:37.09024,lng:-95.712891}}
+                        ];
+                        for(var index = 0; index < markers.length; index++ ){
+                            var point = new BMap.Point(markers[index].position.lng,markers[index].position.lat);
+                            var marker = new BMap.Marker(point,{icon:new BMap.Icon("http://api.map.baidu.com/lbsapi/createmap/images/icon.png",new BMap.Size(20,25),{
+                            imageOffset: new BMap.Size(markers[index].imageOffset.width,markers[index].imageOffset.height)
+                            })});
+                            var label = new BMap.Label(markers[index].title,{offset: new BMap.Size(25,5)});
+                            var opts = {
+                            width: 200,
+                            title: markers[index].title,
+                            enableMessage: false
+                            };
+                            var infoWindow = new BMap.InfoWindow(markers[index].content,opts);
+                            marker.setLabel(label);
+                            addClickHandler(marker,infoWindow);
+                            map.addOverlay(marker);
+                        };
+                    }
+                    //向地图添加控件
+                    function addMapControl(){
+                        var scaleControl = new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_LEFT});
+                        scaleControl.setUnit(BMAP_UNIT_IMPERIAL);
+                        map.addControl(scaleControl);
+                        var navControl = new BMap.NavigationControl({anchor:BMAP_ANCHOR_TOP_LEFT,type:BMAP_NAVIGATION_CONTROL_LARGE});
+                        map.addControl(navControl);
+                        var overviewControl = new BMap.OverviewMapControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT,isOpen:true});
+                        map.addControl(overviewControl);
+                    }
+                    var map;
+                    initMap();
+                }, err => {
+                    alert("失败", err);
+                });
+            };
+        }
+        localStorage.setItem("name", "jack");
+        sessionStorage.setItem("age", 10);
+        console.log(localStorage.getItem("name"),sessionStorage.getItem("age"));
+    </script>
+</head>
+<body>
+    <!-- geolocation: 定位 
+        1.原理
+            pc端：通过IP地址定位，精度差
+            移动端：GPS 精度高
+        2.PC端
+            需要ip地址库
+        存在于navigator.geolocation
+        方法如下：
+        1.getCurrentPosition 获取位置，获取一次
+        2.watchPosition 不断的获取位置
+        3.clearWatch 关掉定位
+    -->
+    <!-- <input type="button" value="定位" id="geolocation">
+    <div class="bmap" id="map"></div> -->
+    <div class="box">
+        <div class="childUp">上</div>
+        <div class="childDown">下</div>
+        <div class="childLeft">左</div>
+        <div class="childRight">右</div>
+        <div class="childIn">内</div>
+        <div class="childOut">外</div>
+    </div>
+</body>
+</html>

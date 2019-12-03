@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>svg</title>
+    <script>
+        window.onload = function() {
+            const ln1 = document.getElementById("line1");
+            ln1.onmouseover=function() {
+                this.style.stroke="red"
+            }
+            ln1.onmouseout=function() {
+                this.style.stroke="yellow"
+            }
+        }
+    </script>
+</head>
+<body>
+    <!-- 
+    SVG由标签组成--svg、line
+    svg虽然是个标签，但不是html的标准 
+    支持事件
+    只可以做属性：决定图形形状的
+    可以放在样式：决定图形的（属性的优先级最低）
+    矢量图没有单位
+    操作属性使用getAttribute和setAttribute
+    图形：line 线
+        rect 矩形
+        circle 圆
+        ellipse 椭圆
+        path 路径 属性：
+            M moveto x y
+            L lineto 多个 x y
+            A arc  rx ry x-axis-rotation x轴旋转角度 
+                large-arc-flag 大弧标志
+                sweep-flag 镜像标志
+                x y 终点的x和y的坐标
+    样式：stroke 边线的颜色 stroke-width 边线的宽度
+    -->
+    <svg width="800" height="400">
+        <!-- <line x1="100" y1="200" x2="300" y2="400" id="line1" style="stroke: yellow; stroke-width: 10;"></line> -->
+        <!-- <rect x="100" y="100" width="100" rx="5" height="100" style="fill:none; stroke:purple"></rect> -->
+        <!-- <circle cx="300" cy="300" r="100"></circle> -->
+        <!-- <ellipse cx="300" cy="300" rx="100" ry="50"></ellipse> -->
+        <path d="M 100 200 L 200 200 A 100 100 0 0 1 400 200 L 500 200" style="stroke:red; fill: none"></path>
+    </svg>
+</body>
+</html>

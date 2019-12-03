@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script>
+        // let ws = new WebSocket("ws://localhost:8089/");
+        // ws.onopen = function() {
+        //     console.log("连到服务器");
+        //     ws.emit("msg","hello world");
+        // }
+        // ws.onmessage = function(data) {
+        //     console.log("有消息",data);
+        // }
+        // ws.onclose = function() {
+        //     console.log("断开了");
+        // }
+        // ws.emit = function(name, ...arg) {
+        //     alert(JSON.stringify({name, data: [...arg]}));
+        //     ws.send(JSON.stringify({name, data: [...arg]}));
+        // }
+    </script>
+    <title>websocket</title>
+</head>
+<body>
+    <script src="./websocket.io.js"></script>
+    <script>
+        const socket = ws.connect("ws://localhost:8089/");
+        socket.on("open", (res) => {
+            console.log(res);
+            console.log("链接成功");
+            socket.emit("msg", 1,22);
+        });
+        socket.on("msg", (res) => {
+            console.log("接收数据", res);
+        })
+        socket.on("disconnect", (res) => {
+            console.log("链接断开");
+        })
+    </script>
+</body>
+</html>

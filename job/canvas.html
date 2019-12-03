@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+    body{
+        background: #ccc;
+    }
+    #c1{
+        background: #fff;
+    }
+    </style>
+    <title>canvas</title>
+    <script>
+        /*
+        **在canvas使用事件的时候，需要自己根据图形的位置去判断是否触发
+        */
+        // window.onload=function() {
+        //     const canvas = document.getElementById("c1");
+        //     const contxt = canvas.getContext("2d");
+        //     let left = 10;
+        //     // contxt.moveTo(100,100);
+        //     // contxt.lineTo(200,200);
+        //     // contxt.strokeStyle="red";
+        //     // contxt.stroke();
+
+        //     // contxt.beginPath(); // 结束之前的路径，开始一个新的路径
+        //     // contxt.moveTo(200,100);
+        //     // contxt.lineTo(300,200);
+        //     // contxt.strokeStyle="yellow";
+        //     // contxt.stroke();
+
+
+        //     // 矩形 rect\strokeRect\fillRect
+        //     // contxt.rect(50,50,100,200);
+        //     // contxt.stroke();
+        //     // clearRect 删除一块图形
+        //     // requestAnimationFrame 请求一个动画帧,实现canvas动画
+        //     // requestAnimationFrame(next);
+        //     // function next(){
+        //     //     contxt.clearRect(0,0,canvas.width,canvas.height);
+        //     //     left+=5;
+        //     //     if (left >= canvas.width - 100) {
+        //     //         left = 50;
+        //     //     }
+        //     //     contxt.strokeRect(left,50,100,200);
+        //     //     // contxt.stroke();
+        //     //     requestAnimationFrame(next);
+        //     // }
+
+        //     // 画圆 arc也是路径需要stroke
+        //     const cx=200,cy=200,r=100;
+        //     // 最后一个参数是控制顺时针、逆时针画圆
+        //     // 第三个、第四个参数应该是弧度
+        //     contxt.beginPath();
+        //     contxt.arc(cx,cy,r,atod(0),atod(360),false);
+        //     contxt.stroke();
+        //     canvas.onmousemove=function(e) {
+        //         const x = e.offsetX, y = e.offsetY;
+        //         dis = Math.sqrt(Math.pow(x-cx,2)+Math.pow(y-cy,2));
+        //         contxt.clearRect(0,0,canvas.width,canvas.height);
+        //         if (dis > r) {
+        //             contxt.strokeStyle="black";
+        //         } else {
+        //             contxt.strokeStyle="red";
+        //         }
+        //         contxt.beginPath();
+        //         contxt.arc(cx,cy,r,atod(0),atod(360),false);
+        //         contxt.stroke();
+        //     }
+        // }
+        // function atod(n){
+        //     return n*Math.PI / 180;
+        // }
+    </script>
+    <script>
+        // window.onload=function() {
+        //     const arr = [30,60,20,40];
+        //     const total = 150;
+        //     const newArr = arr.map(ele => {
+        //         return Math.round(ele / total * 100) / 100;
+        //     });
+        //     console.log(newArr);
+        //     const Oc = document.getElementById("c1");
+        //     const ct = Oc.getContext("2d");
+        //     const cx = 200,cy=200,r=100;
+        //     let beginAng = 0, lineX = cx, lineY = cy;
+        //     newArr.forEach(a => {
+        //         const ang = Math.round(a * 360);
+        //         ct.beginPath();
+        //         ct.arc(cx,cy,r,atod(beginAng),atod(beginAng + ang), false);
+        //         console.log(Math.cos(atod(beginAng + ang)),Math.sin(beginAng + ang));
+        //         const x= cx + Math.round(Math.cos(atod(beginAng + ang)) * r);
+        //         const y= cy + Math.round(Math.sin(atod(beginAng + ang)) * r);
+        //         ct.moveTo(x,y);
+        //         ct.lineTo(cx, cy);
+        //         ct.stroke();
+        //         ct.closePath();
+        //         beginAng +=ang;
+        //     });
+            
+        //     // ct.beginPath();
+        //     // ct.arc(cx,cy,50,atod(0),atod(360), false);
+        //     // ct.fillStyle="#fff";
+        //     // ct.fill();
+        //     // ct.stroke();
+            
+        // }
+        // function atod(n){
+        //     return n*Math.PI / 180;
+        // }
+    </script>
+    <script>
+        // window.onload = function() {
+        //     const Oc = document.getElementById("c1");
+        //     const ct = Oc.getContext("2d");
+        //     ct.rotate(10 * Math.PI/180);
+        //     ct.strokeRect(50,50, 200, 100);
+            
+        // }
+    </script>
+    <script>
+        window.onload = function() {
+            const oC = document.getElementById("c1");
+            const oV = document.getElementById("vidoes");
+            const context = oC.getContext("2d");
+            // 效果不佳，出现卡顿
+            // oV.addEventListener("timeupdate", () => {
+            //     context.drawImage(oV,0,0,1280,680,0,0,oC.width,oC.height);
+            // })
+            requestAnimationFrame(next);
+            function next() {
+                context.drawImage(oV,0,0,1280,680,0,0,oC.width,oC.height);
+                requestAnimationFrame(next);
+            }
+        }
+    </script>
+</head>
+<body>
+    <video src="./video.mp4" width="400" id="vidoes" controls autoplay muted loop></video>
+    <canvas width="400" height="212" id="c1"></canvas>
+</body>
+</html>

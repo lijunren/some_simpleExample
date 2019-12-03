@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h3>hello form api!</h3>
+    用户：<input type="text" id="user" value=""></br>
+    密码：<input type="password" id="pass" value=""></br>
+    文件：<input type="file" id="file" multiple></br>
+    <!-- <input type="button" id="regist" value="注册">
+    <input type="button" id="login" value="登录"> -->
+    <input type="button" id="btn" value="提交"></br>
+    <meter id="met" min="0" max="100" style="width: 100%;"></meter>
+    <script src="./jquery.js"></script>
+  <script>
+      $(document).ready(function() {
+        $("#regist").click(function() {
+            const user = $("#user").val();
+            const pass = $("#pass").val();
+            console.log("regist", user, pass);
+            $.ajax({
+                url: "/api/reg",
+                type: "get",
+                dataType: "json",
+                data: {user,pass},
+                success(res) {
+                    console.log(res);
+                    if(res.err) {
+                        alert(`错误：${res.msg}`);
+                    } else {
+                        alert("注册成功");
+                    }
+                },
+                error(err) {
+                    console.log(err);
+                }
+            });
+        })
+        $("#login").click(function() {
+            const user = $("#user").val();
+            const pass = $("#pass").val();
+            console.log("login", user, pass);
+            $.ajax({
+                url: "/login",
+                type: "GET",
+                dataType: "json",
+                data: {user,pass},
+                success(res) {
+                    console.log(res);
+                    if(res.err) {
+                        alert(`错误：${res.msg}`);
+                    } else {
+                        alert("登录成功");
+                    }
+                },
+                error(err) {
+                    console.log(err);
+                }
+            });
+        })
+        $("#btn").on("click",function() {
+            const user = $("#user").val();
+            const pass = $("#pass").val();
+            const files = $("#file")[0].files;
+            const formData = new FormData();
+            formData.append("user", user);
+            formData.append("pass", pass);
+            Array.from(files).forEach(file => {
+                formData.append("file", file);
+            });
+            // 读取文件
+            const reader = new FileReader();
+            reader.onload = function() {
+                console.log(reader.result);
+            }
+            // reader.readAsText(files[0]);// 读取文本
+            // reader.readAsDataURL(files[0]);  // base64编码形式,base64可以将二进制转成字符串,处理图片以及其他二进制数据
+            // reader.readAsBinaryString(files[0]); // 字符型形式的二进制
+            reader.readAsArrayBuffer(files[0]); //  buffer类二进制
+            const http = new XMLHttpRequest();
+            http.open("post", "http://localhost:8089/upload", true);
+            http.upload.addEventListener("progress", (ev) => {
+                const oM = document.getElementById("met");;
+                oM.value = 100 * (ev.loaded / ev.total);
+                // console.log(100 * (ev.loaded / ev.total));
+            });
+            http.send(formData);
+            http.onreadystatechange = function() {
+                if (http.readyState == 4) {
+                    if (http.status >= 200 && http.status < 300 || http.status == 304) {
+                        console.log("请求数据成功", http.response);
+                    }
+                }
+            }
+        });
+    });
+  </script>
+</body>
+</html>
